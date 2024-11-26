@@ -13,6 +13,7 @@ public class PersonService {
 
     // Placeholder method to save a person (add to Db in the next two weeks)
     public void savePerson(Person person) {
+        personRepository.save(person);
         System.out.println("Person saved: " + person);
     }
 
