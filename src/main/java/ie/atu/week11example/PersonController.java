@@ -14,13 +14,13 @@ public class PersonController {
         this.personService = personService;
     }
 
-    @GetMapping("/{employeeId}")
-    public ResponseEntity<?> getPerson(@PathVariable String employeeId) {
-        if (employeeId.length() > 5 || employeeId.isBlank()) {
+    @GetMapping("/{ID}")
+    public ResponseEntity<?> getPerson(@PathVariable String ID) {
+        if (ID.length() > 5 || ID.isBlank()) {
             return ResponseEntity.badRequest().body("EmployeeId is invalid");
         }
 
-        Person person = personService.getPersonByEmployeeId(employeeId);
+        Person person = personService.getPersonByEmployeeId(ID);
 
         if (person == null) {
             return ResponseEntity.notFound().build();
@@ -33,5 +33,25 @@ public class PersonController {
     public ResponseEntity<String>create(@Valid @RequestBody Person person) {
         personService.savePerson(person);
         return new ResponseEntity<>("Person created successfully", HttpStatus.OK);
+    }
+    
+    @PutMapping("/replace/{ID}")
+    public ResponseEntity<String>create(@Valid @RequestBody Person rperson, @PathVariable String ID)
+    {
+        if (ID.length() > 5 || ID.isBlank()) {
+            return ResponseEntity.badRequest().body("EmployeeId is invalid");
+        }
+
+        if (rperson == null) {
+            return ResponseEntity.notFound().build();
+        }
+        else
+        {
+            Person person = personService.getPersonByEmployeeId(ID);
+            personService.deletePerson(person);
+        }
+
+        personService.savePerson(rperson);
+        return new ResponseEntity<>("Person replaced correctly", HttpStatus.OK);
     }
 }
