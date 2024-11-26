@@ -17,6 +17,12 @@ public class PersonService {
         System.out.println("Person saved: " + person);
     }
 
+    public void deletePerson(Person person)
+    {
+        personRepository.deleteById(person.getID());
+        System.out.println("Person deleted");
+    }
+
     // Placeholder method to retrieve a person by employeeId
     public Person getPersonByEmployeeId(String employeeId) {
         // fetch data from a database in future lab

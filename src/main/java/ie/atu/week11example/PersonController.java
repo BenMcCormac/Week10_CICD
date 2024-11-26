@@ -47,10 +47,11 @@ public class PersonController {
         }
         else
         {
-
+            Person person = personService.getPersonByEmployeeId(ID);
+            personService.deletePerson(person);
         }
 
         personService.savePerson(rperson);
-        return rperson;
+        return new ResponseEntity<>("Person replaced correctly", HttpStatus.OK);
     }
 }
