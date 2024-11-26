@@ -38,20 +38,39 @@ public class PersonController {
     @PutMapping("/replace/{ID}")
     public ResponseEntity<String>create(@Valid @RequestBody Person rperson, @PathVariable String ID)
     {
+        Person person = personService.getPersonByEmployeeId(ID);
+
         if (ID.length() > 5 || ID.isBlank()) {
             return ResponseEntity.badRequest().body("EmployeeId is invalid");
         }
 
-        if (rperson == null) {
+        if (rperson == null||person == null) {
             return ResponseEntity.notFound().build();
         }
         else
         {
-            Person person = personService.getPersonByEmployeeId(ID);
             personService.deletePerson(person);
+            personService.savePerson(rperson);
+            return new ResponseEntity<>("Person replaced correctly", HttpStatus.OK);
+        }
+    }
+
+    @DeleteMapping("/delete/{ID}")
+    public ResponseEntity<String>create(@PathVariable String ID)
+    {
+        if (ID.length() > 5 || ID.isBlank()) {
+            return ResponseEntity.badRequest().body("EmployeeId is invalid");
         }
 
-        personService.savePerson(rperson);
-        return new ResponseEntity<>("Person replaced correctly", HttpStatus.OK);
+        Person person = personService.getPersonByEmployeeId(ID);
+
+        if (person == null) {
+            return ResponseEntity.notFound().build();
+        }
+        else
+        {
+            personService.deletePerson(person);
+            return new ResponseEntity<>("Person Deleted correctly", HttpStatus.OK);
+        }
     }
 }
